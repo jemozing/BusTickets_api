@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,6 @@ public class ScheduleEntity {
     Date fromDate;
     Date toDate;
     String period;
-    int[] dates;
+    List<Date> dates;
 }
 
