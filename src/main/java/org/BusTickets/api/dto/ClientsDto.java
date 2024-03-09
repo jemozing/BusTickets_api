@@ -28,7 +28,7 @@ public enum ClientsDto {;
     interface newPassword{ @NotBlank String getNewPassword();}
     interface  patronymic { String getPatronymic(); }
     interface email { @Email(message = "Email введен неправильно") @NotBlank String getEmail(); }
-    interface phone { @NotBlank int getPhone(); }
+    interface phone { @NotBlank String getPhone(); }
     public enum Request{;
         @Value @Builder
         public static class Registration implements firstName,lastName,patronymic,email,phone,login,password{
@@ -45,7 +45,7 @@ public enum ClientsDto {;
             @JsonProperty("password")
             String password;
             @JsonProperty("phone")
-            int phone;
+            String phone;
         }
         @Value @Builder public static class Editing implements firstName, lastName, patronymic, email, phone, oldPassword, newPassword {
             @JsonProperty("firstName")
@@ -57,7 +57,7 @@ public enum ClientsDto {;
             @JsonProperty("email")
             String email;
             @JsonProperty("phone")
-            int phone;
+            String phone;
             @JsonProperty("oldPassword")
             String oldPassword;
             @JsonProperty("newPassword")
@@ -78,7 +78,7 @@ public enum ClientsDto {;
             @JsonProperty("email")
             String email;
             @JsonProperty("phone")
-            int phone;
+            String phone;
             @JsonProperty("userType")
             String userType;
         }
@@ -95,7 +95,7 @@ public enum ClientsDto {;
             @JsonProperty("email")
             String email;
             @JsonProperty("phone")
-            int phone;
+            String phone;
             @JsonProperty("userType")
             String userType;
         }
@@ -109,7 +109,7 @@ public enum ClientsDto {;
             @JsonProperty("email")
             String email;
             @JsonProperty("phone")
-            int phone;
+            String phone;
             @JsonProperty("userType")
             String userType;
         }

@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 public class DriverEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     @Column(nullable = false)
     String lastName;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.id.IncrementGenerator;
+import org.springframework.security.core.userdetails.User;
 
 @Builder
 @AllArgsConstructor
@@ -14,10 +15,8 @@ import org.hibernate.id.IncrementGenerator;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "Administrators")
-public class AdministratorsEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+public class AdministratorsEntity extends UsersEntity{
+
     @Column(nullable = false)
     String firstName;
     @Column(nullable = false)
@@ -25,9 +24,5 @@ public class AdministratorsEntity {
     String patronymic;
     @Column(nullable = false)
     String position;
-    @Column(unique = true,nullable = false)
-    String login;
-    @Column(nullable = false)
-    String password_hash;
 
 }

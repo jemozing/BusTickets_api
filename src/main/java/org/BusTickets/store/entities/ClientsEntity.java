@@ -10,27 +10,25 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Data
 @Setter
 @Entity
 @Table(name = "Clients")
-public class ClientsEntity {
+public class ClientsEntity extends UsersEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    Long id;
     @Column(nullable = false)
     String lastName;
     @Column(nullable = false)
     String firstName;
     String patronymic;
-    @Column(nullable = false)
+    @Column(unique = true,nullable = false)
     String email;
     @Column(nullable = false)
-    int phone;
-    @Column(unique = true,nullable = false)
-    String login;
-    String password_hash;
+    String phone;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private HashSet<TicketsEntity> tickets;
+    private Set<TicketsEntity> tickets;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<OrdersEntity> orders;
+
 }

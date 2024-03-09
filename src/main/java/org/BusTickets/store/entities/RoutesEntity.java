@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
-import org.hibernate.query.sqm.IntervalType;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.util.HashSet;
 
 @AllArgsConstructor
 @NoArgsConstructor

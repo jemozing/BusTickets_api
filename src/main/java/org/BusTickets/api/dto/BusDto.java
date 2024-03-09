@@ -18,7 +18,7 @@ public enum BusDto {;
 
     }
     public enum Response{;
-        @Value @Builder public static class Information implements busBrand, busName, numOfSeats, busRange{
+        @Value public static class Information implements busBrand, busName, numOfSeats, busRange{
             @JsonProperty("busBrand")
             String busBrand;
             @JsonProperty("busName")
@@ -28,7 +28,7 @@ public enum BusDto {;
             @JsonProperty("range")
             int busRange;
         }
-        @Value @Builder public static class InfoAboutBusBrands implements busBrand{
+        @Value public static class InfoAboutBusBrands implements busBrand{
             @JsonProperty("busBrand")
             String busBrand;
         }

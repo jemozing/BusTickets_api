@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class PassengersEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     String firstName;
     String lastName;

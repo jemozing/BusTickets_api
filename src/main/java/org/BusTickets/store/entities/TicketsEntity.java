@@ -15,13 +15,12 @@ import java.util.Date;
 @Entity
 public class TicketsEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    Long id;
+    String id;
     int price;
     Date date;
     int bus_place;
     @OneToOne
-    RoutesEntity route;
-    @OneToOne
     PassengersEntity passenger;
+    @OneToOne
+    ClientsEntity client;
 }

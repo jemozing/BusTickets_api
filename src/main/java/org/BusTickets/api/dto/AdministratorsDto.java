@@ -19,9 +19,11 @@ public enum AdministratorsDto {;
     interface newPassword{ @NotBlank String getNewPassword();}
     interface  patronymic { String getPatronymic(); }
     interface position { @NotBlank String getPosition(); }
+    interface userType {@NotBlank String getUserType();}
 
     public enum Response{;
-        @Value public static class Registration implements Id, firstName, lastName,patronymic,position {
+        @Value @Builder
+        public static class Registration implements Id, firstName, lastName,patronymic,position,userType {
             @JsonProperty("id")
             Long Id;
             @JsonProperty("firstName")
@@ -35,7 +37,8 @@ public enum AdministratorsDto {;
             @JsonProperty("userType")
             String userType;
         }
-        @Value public static class Information implements Id, firstName, lastName,patronymic,position {
+        @Value @Builder
+        public static class Information implements Id, firstName, lastName,patronymic,position,userType {
             @JsonProperty("id")
             Long Id;
             @JsonProperty("firstName")
@@ -49,7 +52,8 @@ public enum AdministratorsDto {;
             @JsonProperty("userType")
             String userType;
         }
-        @Value public static class Editing implements firstName,lastName,patronymic,position{
+        @Value @Builder
+        public static class Editing implements firstName,lastName,patronymic,position,userType{
             @JsonProperty("firstName")
             String firstName;
             @JsonProperty("lastName")
@@ -63,7 +67,8 @@ public enum AdministratorsDto {;
         }
     }
     public enum Request{;
-        @Value public static class Registration implements firstName, lastName, patronymic, position,login,password {
+        @Value @Builder
+        public static class Registration implements firstName, lastName, patronymic, position,login,password {
             @JsonProperty("firstName")
             String firstName;
             @JsonProperty("lastName")
@@ -77,7 +82,8 @@ public enum AdministratorsDto {;
             @JsonProperty("password")
             String password;
         }
-        @Value public static class Editing implements firstName,lastName,patronymic,position,oldPassword,newPassword{
+        @Value @Builder
+        public static class Editing implements firstName,lastName,patronymic,position,oldPassword,newPassword{
             @JsonProperty("firstName")
             String firstName;
             @JsonProperty("lastName")

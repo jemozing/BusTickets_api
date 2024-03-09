@@ -17,4 +17,7 @@ public class BusEntity {
     String bus_name;
     int num_of_seats;
     int bus_range;
+    int[] places;
+    @OneToOne
+    DriverEntity driver;
 }

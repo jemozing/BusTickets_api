@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 public class ScheduleEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     Date fromDate;
     Date toDate;
