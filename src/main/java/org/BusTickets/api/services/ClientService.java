@@ -1,19 +1,27 @@
 package org.BusTickets.api.services;
 
 import lombok.RequiredArgsConstructor;
+import org.BusTickets.api.controllers.AdministratorController;
+import org.BusTickets.api.dto.ClientsDto;
+import org.BusTickets.api.mappers.ClientsDtoMapper;
 import org.BusTickets.store.entities.ClientsEntity;
 import org.BusTickets.store.entities.Role;
 import org.BusTickets.store.entities.UsersEntity;
 import org.BusTickets.store.repositories.ClientsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientsRepository clientsRepository;
-
+    private final PasswordEncoder passwordEncoder;
+    private final ClientsDtoMapper clientsDtoMapper;
+    private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
     /**
      * Сохранение пользователя
      *
@@ -29,18 +37,24 @@ public class ClientService {
      *
      * @return созданный пользователь
      */
-    public ClientsEntity create(ClientsEntity user) {
-        if (clientsRepository.existsByLogin(user.getUsername())) {
+    public ClientsEntity create(ClientsDto.Request.Registration newClient) {
+        String hashedPassword = passwordEncoder.encode(newClient.getPassword());
+        ClientsEntity entity = clientsDtoMapper.makeClientUserEntity(newClient);
+        entity.setPassword(hashedPassword);
+        if (clientsRepository.existsByLogin(entity.getUsername())) {
             // Заменить на свои исключения
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }
-        if (clientsRepository.existsByEmail(user.getEmail())) {
+        if (clientsRepository.existsByEmail(entity.getEmail())) {
             // Заменить на свои исключения
             throw new RuntimeException("Пользователь с таким email уже существует");
         }
-        return save(user);
+        logger.info(entity.toString());
+        return save(entity);
     }
-
+    public ClientsEntity edit(ClientsDto.Request.Editing editClient){
+        return null;
+    }
     /**
      * Получение пользователя по имени пользователя
      *
@@ -83,7 +97,7 @@ public class ClientService {
     @Deprecated
     public void setClient() {
         var user = getCurrentClient();
-        user.setUserType(Role.user);
+        user.setUserType(Role.client);
         save(user);
     }
 }

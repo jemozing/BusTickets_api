@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.BusTickets.store.entities.UsersEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.Base64;
 @Service
+@RequiredArgsConstructor
 public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
@@ -28,6 +31,16 @@ public class JwtService {
      */
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    /**
+     * Извлечение роли пользователя из токена
+     *
+     * @param token токен
+     * @return роль пользователя
+     */
+    public String extractUserRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     /**
@@ -121,7 +134,7 @@ public class JwtService {
      * @return ключ
      */
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

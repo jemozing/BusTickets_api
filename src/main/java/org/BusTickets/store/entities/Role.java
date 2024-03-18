@@ -1,6 +1,6 @@
 package org.BusTickets.store.entities;
 
 public enum Role {
-    user,
+    client,
     admin
 }

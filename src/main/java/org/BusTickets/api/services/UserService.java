@@ -22,7 +22,7 @@ public class UserService {
 
     }
     public UserDetailsService userDetailsService(){
-        return  this::getByLogin;
+        return this::getByLogin;
     }
     public UsersEntity getCurrentUser() {
         // Получение имени пользователя из контекста Spring Security

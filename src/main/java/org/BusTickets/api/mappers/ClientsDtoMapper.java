@@ -53,7 +53,7 @@ public class ClientsDtoMapper {
                 .build();
         clientsEntity.setLogin(dto.getLogin());
         clientsEntity.setPassword(dto.getPassword());
-        clientsEntity.setUserType(Role.user);
+        clientsEntity.setUserType(Role.client);
         return clientsEntity;
     }
 
