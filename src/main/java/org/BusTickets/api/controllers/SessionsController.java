@@ -60,9 +60,9 @@ public class SessionsController {
         }
     }
     @DeleteMapping("/api/sessions")
-    void logout(){}
+    ResponseEntity<?> logout(@Valid HttpServletRequest request, HttpServletResponse response){return null;}
     @DeleteMapping("/api/accounts")
-    void userLeave(){}
+    ResponseEntity<?> userLeave(@Valid HttpServletRequest request, HttpServletResponse response){return null;}
     @GetMapping("/api/accounts")
     public ResponseEntity<?> getInfoCurrentUser(@Valid HttpServletRequest request, HttpServletResponse response){
         try {
@@ -102,5 +102,5 @@ public class SessionsController {
     }
     @GetMapping("/api/settings")
     @PreAuthorize("hasAuthority('admin')")
-    void getSettings(){}
+    ResponseEntity<?> getSettings(@Valid HttpServletRequest request, HttpServletResponse response){return null;}
 }

@@ -55,35 +55,13 @@ public class AdministratorsDtoMapper {
     }
 
     public AdministratorsEntity editAdministratorsEntity(AdministratorsDto.Request.Editing dto) {
-        // Проверяем, был ли передан новый пароль
-        if (dto.getNewPassword() != null && !dto.getNewPassword().isEmpty()) {
-            // Проверяем, уникальность нового пароля
-            if (isPasswordUnique(dto.getNewPassword())) {
-
-                return AdministratorsEntity.builder()
-                        .firstName(dto.getFirstName())
-                        .lastName(dto.getLastName())
-                        .patronymic(dto.getPatronymic())
-                        .position(dto.getPosition())
-                        .build();
-            } else {
-                // Вернуть null или бросить исключение в зависимости от вашей логики обработки ошибок
-                return null;
-            }
-        } else {
-            // Если новый пароль не был передан, просто обновляем остальные поля
-            return AdministratorsEntity.builder()
-                    .firstName(dto.getFirstName())
-                    .lastName(dto.getLastName())
-                    .patronymic(dto.getPatronymic())
-                    .position(dto.getPosition())
-                    .build();
-        }
-    }
-
-    private boolean isPasswordUnique(String newPassword) {
-        // Здесь должна быть логика проверки уникальности пароля, например, запрос к базе данных
-        // Возвращаем true, если пароль уникален, false - в противном случае
-        return true; // Заглушка, замените на вашу реализацию
+        AdministratorsEntity entity = AdministratorsEntity.builder()
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .patronymic(dto.getPatronymic())
+                .position(dto.getPosition())
+                .build();
+        entity.setPassword(dto.getNewPassword());
+        return entity;
     }
 }

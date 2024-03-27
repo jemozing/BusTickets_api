@@ -4,11 +4,14 @@ import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.BusTickets.api.dto.PlacesDto;
 import org.hibernate.annotations.Type;
 
 import java.sql.Time;
 import java.time.Duration;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +27,7 @@ public class RoutesEntity {
     String fromStation;
     String toStation;
     Time start;
+    int price;
 
     @Type(PostgreSQLIntervalType.class)
     @Column(
@@ -36,4 +40,6 @@ public class RoutesEntity {
     BusEntity bus;
     @OneToOne
     ScheduleEntity schedule;
+    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
+    Set<PlacesEntity> places;
 }

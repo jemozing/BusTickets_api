@@ -69,27 +69,27 @@ public class ClientController {
     }
     @PutMapping ("/api/clients")
     @PreAuthorize("hasAuthority('client')")
-    ClientsDto.Response.Editing editingClient(){
+    ResponseEntity<?> editingClient(){
         return null;
     }
     @PostMapping("/api/orders")
     @PreAuthorize("hasAuthority('client')")
-    OrdersDto.Response.BookingTickets bookingOrders(@RequestBody OrdersDto.Request.BookingTickets bookingOrder){
+    ResponseEntity<?> bookingOrders(@RequestBody OrdersDto.Request.BookingTickets bookingOrder, HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @PostMapping("/api/places/{orderId}")
     @PreAuthorize("hasAuthority('client')")
-    int[] getFreePlaces(@PathVariable String orderId){
+    ResponseEntity<?> getFreePlaces(@PathVariable String orderId, HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @PostMapping("/api/places")
     @PreAuthorize("hasAuthority('client')")
-    PlacesDto.Response.ChoosePlace choosePlace(@RequestBody PlacesDto.Request.ChoosePlace newChoosePlace){
+    ResponseEntity<?> choosePlace(@RequestBody PlacesDto.Request.ChoosePlace newChoosePlace, HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @DeleteMapping("/api/orders/{orderId}")
     @PreAuthorize("hasAuthority('client')")
-    void deleteOrder(@PathVariable String orderId){
-
+    ResponseEntity<?> deleteOrder(@PathVariable String orderId, HttpServletRequest request, HttpServletResponse response){
+        return null;
     }
 }

@@ -21,6 +21,7 @@ public class ScheduleEntity {
     Date fromDate;
     Date toDate;
     String period;
+    @ElementCollection
     List<Date> dates;
 }
 

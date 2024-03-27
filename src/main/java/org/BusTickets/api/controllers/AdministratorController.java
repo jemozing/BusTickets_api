@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +16,7 @@ import org.BusTickets.api.helpers.ErrorsResponses;
 import org.BusTickets.api.helpers.GlobalExceptionHandler;
 import org.BusTickets.api.mappers.AdministratorsDtoMapper;
 import org.BusTickets.api.mappers.ClientsDtoMapper;
+import org.BusTickets.api.services.AdminBusService;
 import org.BusTickets.api.services.AdministratorService;
 import org.BusTickets.api.services.JwtService;
 import org.BusTickets.api.services.UserService;
@@ -50,6 +52,7 @@ public class AdministratorController {
     ClientsDtoMapper clientsDtoMapper;
     ClientsRepository clientsRepository;
     AdministratorService administratorService;
+    AdminBusService adminBusService;
     private final UserService userService;
     private final JwtService jwtService;
     private final GlobalExceptionHandler globalExceptionHandler;
@@ -80,46 +83,45 @@ public class AdministratorController {
     }
     @GetMapping("/api/clients")
     @PreAuthorize("hasAuthority('admin')")
-    List<ClientsDto.Response.Information> getInfoClients(){
+    ResponseEntity<?> getInfoClients(@Valid HttpServletRequest request, HttpServletResponse response){
         final List<ClientsEntity> clientsEntitiesList = clientsRepository.findAll();
         ArrayList<ClientsDto.Response.Information> clientsDtoList = new ArrayList<>();
-        Iterator<ClientsEntity> clientsEntityIterator = clientsEntitiesList.iterator();
-        while(clientsEntityIterator.hasNext()){
-            clientsDtoList.add(clientsDtoMapper.makeClientsInfoDto(clientsEntityIterator.next()));
+        for (ClientsEntity clientsEntity : clientsEntitiesList) {
+            clientsDtoList.add(clientsDtoMapper.makeClientsInfoDto(clientsEntity));
         }
-        return clientsDtoList;
+        return ResponseEntity.ok().body(clientsDtoList);
     }
     @PutMapping("/api/admins")
     @PreAuthorize("hasAuthority('admin')")
-    AdministratorsDto.Response.Editing editingAdmin(){
+    ResponseEntity<?> editingAdmin(@Valid HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @GetMapping("/api/buses")
     @PreAuthorize("hasAuthority('admin')")
-    List<BusDto.Response.InfoAboutBusBrands> gettingInfoBusBrand(){
-        return null;
+    ResponseEntity<?> gettingInfoBusBrand(@Valid HttpServletRequest request, HttpServletResponse response){
+        return ResponseEntity.ok().body(adminBusService.getBusBrands());
     }
     @PostMapping("/api/trips")
     @PreAuthorize("hasAuthority('admin')")
-    RouteDto.Response.Create createRoute(@RequestBody RouteDto.Request.Create newRoute){
+    ResponseEntity<?> createRoute(@Valid @RequestBody RouteDto.Request.Create newRoute ,HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @PutMapping("/api/trips/{routeId}")
     @PreAuthorize("hasAuthority('admin')")
-    RouteDto.Response.Editing editingRoute(@RequestBody RouteDto.Request.Editing editeRoute, @PathVariable String routeId){
+    ResponseEntity<?> editingRoute(@PathVariable String routeId, @Valid @RequestBody RouteDto.Request.Editing editeRoute, HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @DeleteMapping("/api/trips/{routeId}")
     @PreAuthorize("hasAuthority('admin')")
-    void deleteRoute(@PathVariable String routeId){}
+    ResponseEntity<?> deleteRoute(@PathVariable String routeId,@Valid HttpServletRequest request, HttpServletResponse response){return null;}
     @GetMapping("/api/trips/{routeId}")
     @PreAuthorize("hasAuthority('admin')")
-    RouteDto.Response.Information infoRoute(@PathVariable String routeId){
+    ResponseEntity<?> infoRoute(@PathVariable String routeId,@Valid HttpServletRequest request, HttpServletResponse response){
         return null;
     }
     @PutMapping("/api/trips/{routeId}/approve")
     @PreAuthorize("hasAuthority('admin')")
-    RouteDto.Response.Information approveRoute(@PathVariable String routeId){
+    ResponseEntity<?> approveRoute(@PathVariable String routeId,@Valid HttpServletRequest request, HttpServletResponse response){
         return null;
     }
 }

@@ -1,9 +1,12 @@
 package org.BusTickets.api.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -14,8 +17,10 @@ public enum PlacesDto {;
     interface passport {int getPassport();}
     interface place {int getPlace();}
     interface ticket {String getTicket();}
-    interface placesBus {int[] getPlacesBus();}
+    interface placesBus {
+        List<String> getPlacesBus();}
     public enum Request{;
+        @Builder
         @Value public static class ChoosePlace implements orderId,firstName,lastName,passport,place{
             int orderId;
             String firstName;
@@ -25,6 +30,7 @@ public enum PlacesDto {;
         }
     }
     public enum Response{;
+        @Builder
         @Value public static class ChoosePlace implements orderId,firstName,lastName,passport,place,ticket{
             int orderId;
             String firstName;
@@ -33,8 +39,9 @@ public enum PlacesDto {;
             int place;
             String ticket;
         }
+        @Builder
         @Value public static class PlacesBus implements placesBus{
-            int[] placesBus;
+            List<String> placesBus;
         }
     }
 }

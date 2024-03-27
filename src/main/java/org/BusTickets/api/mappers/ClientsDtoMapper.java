@@ -57,13 +57,15 @@ public class ClientsDtoMapper {
         return clientsEntity;
     }
 
-    public ClientsEntity makeClientUserEntity(ClientsDto.Request.Editing dto) {
-        ClientsEntity entity = new ClientsEntity();
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setPatronymic(dto.getPatronymic());
-        entity.setEmail(dto.getEmail());
-        entity.setPhone(dto.getPhone());
+    public ClientsEntity EditClientEntity(ClientsDto.Request.Editing dto) {
+        ClientsEntity entity = ClientsEntity.builder()
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .patronymic(dto.getPatronymic())
+                .email(dto.getEmail())
+                .phone(dto.getPhone())
+                .build();
+        entity.setPassword(dto.getNewPassword());
         return entity;
     }
 }

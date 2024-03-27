@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public enum BusDto {;
     interface busBrand{ String getBusBrand(); }
     interface busName{ String getBusName(); }
-    interface busRange{ int getBusRange(); }
+    interface busRange{ float getBusRange(); }
     interface numOfSeats{ int getNumOfSeats(); }
     public enum Requests{;
 
@@ -26,11 +26,13 @@ public enum BusDto {;
             @JsonProperty("placeCount")
             int numOfSeats;
             @JsonProperty("range")
-            int busRange;
+            float busRange;
         }
         @Value public static class InfoAboutBusBrands implements busBrand{
             @JsonProperty("busBrand")
             String busBrand;
+            @JsonProperty("placeCount")
+            int numOfSeats;
         }
     }
 

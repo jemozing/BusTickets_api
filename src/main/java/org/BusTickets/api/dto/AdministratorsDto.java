@@ -10,9 +10,21 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum AdministratorsDto {;
     interface Id { @Positive Long getId();}
-    interface firstName { @NotBlank String getFirstName(); }
-    interface lastName { @NotBlank String getLastName(); }
-    interface login { @NotBlank String getLogin(); }
+    interface firstName {
+        /**
+         * Administrator First Name
+        **/
+        @NotBlank String getFirstName();}
+    interface lastName {
+        /**
+         * Administrator Last Name
+         **/
+        @NotBlank String getLastName(); }
+    interface login {
+        /**
+         * Administrator Login/Username
+         **/
+        @NotBlank String getLogin(); }
     interface password { @NotBlank String getPassword(); }
     interface passwordHash {@NotBlank String getPasswordHash();}
     interface oldPassword{ @NotBlank String getOldPassword();}

@@ -12,6 +12,6 @@ public class BusDtoMapper {
     }
 
     public BusDto.Response.InfoAboutBusBrands makeBusBrandsDto(BusEntity entity) {
-        return new BusDto.Response.InfoAboutBusBrands(entity.getBus_brand());
+        return new BusDto.Response.InfoAboutBusBrands(entity.getBus_brand(),entity.getNum_of_seats());
     }
 }
