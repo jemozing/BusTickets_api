@@ -1,39 +1,27 @@
 package org.BusTickets.api.mappers;
 
-import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.dto.OrdersDto;
-import org.BusTickets.api.dto.PassengersDto;
 import org.BusTickets.store.entities.OrdersEntity;
-import org.BusTickets.store.entities.RoutesEntity;
-import org.BusTickets.store.entities.ScheduleEntity;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Component
-@RequiredArgsConstructor
-public class OrdersDtoMapper {
+@Mapper
+public interface OrdersDtoMapper {
 
-    /**
-     * 3.18 Заказ билетов - ответ
-     * 3.19 Получение списка заказов - ответ
-     *
-     * @param ordersEntity
-     * @param routesEntity
-     * @return
-     */
-    public OrdersDto.Response.BookingTickets bookingTickets(OrdersEntity ordersEntity, RoutesEntity routesEntity){
-        OrdersDto.Response.BookingTickets bookingTicketsDto = OrdersDto.Response.BookingTickets.builder()
-                .orderId(ordersEntity.getId())
-                .tripId(routesEntity.getId())
-                .fromStation(routesEntity.getFromStation())
-                .toStation(routesEntity.getToStation())
-                .busName(routesEntity.getBus().getBus_name())
-                .date(ordersEntity.getDate())
-                .start(routesEntity.getStart())
-                .duration(routesEntity.getDuration())
-                .price(routesEntity.getPrice())
-                .passengers((PassengersDto.Passenger[]) ordersEntity.getPassengers().toArray())
-                .build();
-        //добавить totalPrice и
-        return bookingTicketsDto;
-    }
+    OrdersDtoMapper INSTANCE = Mappers.getMapper(OrdersDtoMapper.class);
+
+    @Mapping(source = "Id",target = "orderId")
+    @Mapping(source = "routes.Id",target = "tripId")
+    @Mapping(source = "routes.fromStation", target = "fromStation")
+    @Mapping(source = "routes.toStation", target = "toStation")
+    @Mapping(source = "routes.bus.bus_name", target = "busName")
+    @Mapping(source = "date", target = "date")
+    @Mapping(source = "routes.start", target = "start")
+    @Mapping(source = "routes.duration", target = "duration")
+    @Mapping(source = "routes.price", target = "price")
+    @Mapping(source = "passengers", target = "passengers")
+    @Mapping(source = "totalPrice",target = "totalPrice")
+    OrdersDto.Response.BookingTickets EntityToDto(OrdersEntity entity);
+
 }

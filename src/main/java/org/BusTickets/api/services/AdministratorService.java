@@ -1,5 +1,7 @@
 package org.BusTickets.api.services;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.controllers.AdministratorController;
 import org.BusTickets.api.dto.AdministratorsDto;
@@ -12,9 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.BusTickets.api.helpers.JwtAuthenticationFilter.COOKIE_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class AdministratorService {
     private final AdministratorsRepository administratorsRepository;
     private final AdministratorsDtoMapper administratorsDtoMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
     public AdministratorsEntity save(AdministratorsEntity entity){
         return administratorsRepository.saveAndFlush(entity);
@@ -38,23 +42,43 @@ public class AdministratorService {
         logger.info(entity.toString());
         return save(entity);
     }
-    public AdministratorsEntity edit(AdministratorsDto.Request.Editing editAdmin){
-        AdministratorsEntity entity = administratorsDtoMapper.editAdministratorsEntity(editAdmin);
+    public AdministratorsEntity edit(AdministratorsDto.Request.Editing editAdmin, HttpServletRequest request){
+        var cookies = request.getCookies();
+        String jwt = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(COOKIE_NAME)) {
+                    jwt = cookie.getValue();
+                    logger.info("Прошла авторизация");
+                    logger.info(jwt);
+                    break;
+                }
+            }
+        }
+
+        AdministratorsEntity oldEntity = administratorsRepository.findById(jwtService.extractUserId(jwt))
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
         if(editAdmin.getOldPassword().equals(editAdmin.getNewPassword())){
+            logger.info("Старый и новый пароль не может быть одинаковым");
             throw new RuntimeException("Старый и новый пароль не может быть одинаковым");
         }
-        if(passwordEncoder.matches(editAdmin.getOldPassword(),editAdmin.getNewPassword())){
+        if(passwordEncoder.matches(editAdmin.getOldPassword(),oldEntity.getPassword())){
+            logger.info("Старый пароль введен неверно");
             throw new RuntimeException("Старый пароль введен неверно");
         }
-        logger.info(entity.toString());
-        return save(entity);
+        AdministratorsEntity newEntity = administratorsDtoMapper.editAdministratorsEntity(editAdmin);
+        logger.info("Новая сущность:" + newEntity.toString());
+        return save(newEntity);
     }
     public AdministratorsEntity getByLogin(String login) {
         return administratorsRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
-
+    public AdministratorsEntity getById(long id){
+        return administratorsRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    }
     /**
      * Получение пользователя по имени пользователя
      * <p>

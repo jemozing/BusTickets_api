@@ -22,8 +22,8 @@ public enum OrdersDto {;
     interface toStation { String getToStation(); }
     interface start { Time getStart(); }
     interface duration { Duration getDuration(); }
-    interface price { int getPrice(); }
-    interface totalPrice{int getTotalPrice();}
+    interface price { double getPrice(); }
+    interface totalPrice{double getTotalPrice();}
 
     public enum Request{;
         @Builder @Value public static class BookingTickets implements tripId,date,passengers{
@@ -42,8 +42,8 @@ public enum OrdersDto {;
             String busName;
             Time start;
             Duration duration;
-            int price;
-            int totalPrice;
+            double price;
+            double totalPrice;
             Date date;
             PassengersDto.Passenger[] passengers;
         }

@@ -16,11 +16,15 @@ import java.util.Date;
 public class TicketsEntity {
     @Id
     String id;
-    int price;
+    double price;
     Date date;
     int bus_place;
     @OneToOne
     PassengersEntity passenger;
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     ClientsEntity client;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    OrdersEntity order;
 }

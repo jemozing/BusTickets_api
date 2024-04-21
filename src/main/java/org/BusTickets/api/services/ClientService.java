@@ -6,7 +6,6 @@ import org.BusTickets.api.dto.ClientsDto;
 import org.BusTickets.api.mappers.ClientsDtoMapper;
 import org.BusTickets.store.entities.ClientsEntity;
 import org.BusTickets.store.entities.Role;
-import org.BusTickets.store.entities.UsersEntity;
 import org.BusTickets.store.repositories.ClientsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +64,10 @@ public class ClientService {
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
     }
-
+    public ClientsEntity getById(long id){
+        return clientsRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    }
     /**
      * Получение пользователя по имени пользователя
      * <p>

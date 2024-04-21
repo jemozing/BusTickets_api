@@ -19,10 +19,13 @@ public class OrdersEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     Date date;
+    double totalPrice;
     @OneToOne
     RoutesEntity routes;
     @OneToMany(cascade = CascadeType.ALL)
     private HashSet<PassengersEntity> passengers;
+    @OneToMany(cascade = CascadeType.ALL)
+    private HashSet<TicketsEntity> tickets;
     @OneToOne
     ClientsEntity client;
 }

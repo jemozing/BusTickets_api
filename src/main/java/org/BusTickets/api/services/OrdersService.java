@@ -3,17 +3,14 @@ package org.BusTickets.api.services;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.dto.PlacesDto;
 import org.BusTickets.store.entities.OrdersEntity;
-import org.BusTickets.store.entities.PlacesEntity;
 import org.BusTickets.store.repositories.PlacesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ClientOrdersService {
+public class OrdersService {
     private final PlacesRepository placesRepository;
 
 

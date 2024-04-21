@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class BusEntity {
     @Id
-    String bus_brand;
+    String bus_number;
     String bus_name;
     int num_of_seats;
     float bus_range;

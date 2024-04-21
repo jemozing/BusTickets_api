@@ -21,12 +21,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
-    /**
-     * Регистрация пользователя
-     *
-     * @param request данные пользователя
-     * @return токен
-     */
     /*public JwtAuthenticationDto.Response.JwtToken signUp(UsersDto.Request.SignIn request) {
 
         var user = UsersEntity.builder()
@@ -43,7 +37,7 @@ public class AuthenticationService {
                 .token(jwt)
                 .build();;
     }*/
-
+    public void signOut(){}
     /**
      * Аутентификация пользователя
      *

@@ -1,10 +1,10 @@
 package org.BusTickets.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +30,7 @@ public enum ClientsDto {;
     interface email { @Email(message = "Email введен неправильно") @NotBlank String getEmail(); }
     interface phone { @NotBlank String getPhone(); }
     public enum Request{;
+        @Schema(name = "Registration ClientDTO Request",description = "")
         @Value @Builder
         public static class Registration implements firstName,lastName,patronymic,email,phone,login,password{
             @JsonProperty("firstName")
@@ -47,6 +48,7 @@ public enum ClientsDto {;
             @JsonProperty("phone")
             String phone;
         }
+        @Schema(name = "Editing ClientDTO Request",description = "")
         @Value @Builder public static class Editing implements firstName, lastName, patronymic, email, phone, oldPassword, newPassword {
             @JsonProperty("firstName")
             String firstName;
@@ -65,6 +67,7 @@ public enum ClientsDto {;
         }
     }
     public enum Response{;
+        @Schema(name = "Registration ClientDTO Response",description = "")
         @Value @Builder
         public static class Registration implements Id,firstName,lastName,patronymic,email,phone{
             @JsonProperty("id")
@@ -82,6 +85,7 @@ public enum ClientsDto {;
             @JsonProperty("userType")
             String userType;
         }
+        @Schema(name = "Information ClientDTO Response",description = "")
         @Value @Builder
         public static class Information implements Id,firstName,lastName,patronymic,email,phone{
             @JsonProperty("id")
@@ -99,6 +103,7 @@ public enum ClientsDto {;
             @JsonProperty("userType")
             String userType;
         }
+        @Schema(name = "Editing ClientDTO Response",description = "")
         @Value @Builder public static class Editing implements firstName, lastName, patronymic, email, phone {
             @JsonProperty("firstName")
             String firstName;

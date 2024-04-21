@@ -4,19 +4,17 @@ import io.hypersistence.utils.hibernate.type.interval.PostgreSQLIntervalType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.BusTickets.api.dto.PlacesDto;
 import org.hibernate.annotations.Type;
 
 import java.sql.Time;
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity(name = "Routes")
 public class RoutesEntity {
@@ -27,7 +25,7 @@ public class RoutesEntity {
     String fromStation;
     String toStation;
     Time start;
-    int price;
+    double price;
 
     @Type(PostgreSQLIntervalType.class)
     @Column(

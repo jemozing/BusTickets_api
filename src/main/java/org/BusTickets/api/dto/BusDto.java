@@ -10,17 +10,15 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum BusDto {;
-    interface busBrand{ String getBusBrand(); }
+    interface busNumber { String getBusNumber(); }
     interface busName{ String getBusName(); }
     interface busRange{ float getBusRange(); }
     interface numOfSeats{ int getNumOfSeats(); }
     public enum Requests{;
-
-    }
-    public enum Response{;
-        @Value public static class Information implements busBrand, busName, numOfSeats, busRange{
+        @Value @Builder
+        public static class Create implements BusDto.busNumber, busName, numOfSeats, busRange{
             @JsonProperty("busBrand")
-            String busBrand;
+            String busNumber;
             @JsonProperty("busName")
             String busName;
             @JsonProperty("placeCount")
@@ -28,9 +26,31 @@ public enum BusDto {;
             @JsonProperty("range")
             float busRange;
         }
-        @Value public static class InfoAboutBusBrands implements busBrand{
+    }
+    public enum Response{;
+        @Value @Builder public static class Information implements BusDto.busNumber, busName, numOfSeats, busRange{
             @JsonProperty("busBrand")
-            String busBrand;
+            String busNumber;
+            @JsonProperty("busName")
+            String busName;
+            @JsonProperty("placeCount")
+            int numOfSeats;
+            @JsonProperty("range")
+            float busRange;
+        }
+        @Value @Builder public static class Create implements BusDto.busNumber, busName, numOfSeats, busRange{
+            @JsonProperty("busBrand")
+            String busNumber;
+            @JsonProperty("busName")
+            String busName;
+            @JsonProperty("placeCount")
+            int numOfSeats;
+            @JsonProperty("range")
+            float busRange;
+        }
+        @Value @Builder public static class InfoAboutBusBrands implements busNumber {
+            @JsonProperty("busBrand")
+            String busNumber;
             @JsonProperty("placeCount")
             int numOfSeats;
         }

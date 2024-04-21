@@ -19,7 +19,7 @@ public enum RouteDto {;
     interface toStation { String getToStation(); }
     interface start { Time getStart(); }
     interface duration { Duration getDuration(); }
-    interface price { int getPrice(); }
+    interface price { double getPrice(); }
     interface schedule { ScheduleDto.Request.Schedule getSchedule(); }
     interface dates { ScheduleDto.Request.Dates getDates(); }
     interface bus { BusDto.Response.Information getBus(); }
@@ -38,7 +38,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("schedule")
             ScheduleDto.Request.Schedule schedule;
             ScheduleDto.Request.Dates dates;
@@ -56,7 +56,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("schedule")
             ScheduleDto.Request.Schedule schedule;
             ScheduleDto.Request.Dates dates;
@@ -76,7 +76,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("bus")
             BusDto.Response.Information bus;
             @JsonProperty("approved")
@@ -98,7 +98,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("bus")
             BusDto.Response.Information bus;
             @JsonProperty("approved")
@@ -120,7 +120,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("bus")
             BusDto.Response.Information bus;
             @JsonProperty("approved")
@@ -142,7 +142,7 @@ public enum RouteDto {;
             @JsonProperty("duration")
             Duration duration;
             @JsonProperty("price")
-            int price;
+            double price;
             @JsonProperty("bus")
             BusDto.Response.Information bus;
             @JsonProperty("approved")

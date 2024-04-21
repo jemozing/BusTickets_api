@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.BusTickets'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -18,6 +18,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: '3.2.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.2.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.2.3'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.5.0'
 }
 /**
  * Other
@@ -26,6 +27,9 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.2'
     implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.7.2'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+    implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.78'
 }
 dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'

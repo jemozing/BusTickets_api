@@ -1,0 +1,40 @@
+version: '3'
+services:
+  bustickets-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      service_db:
+        condition: service_healthy
+    ports:
+      - "8300:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pg_bd/busticket_db
+      SPRING_DATASOURCE_USERNAME: pguser
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  service_db:
+    environment:
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=busticket_db  # Задаем имя базы данных
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/postgresql/16/bin'
+      - GOSU_VERSION=1.16
+      - LANG=en_US.utf8
+      - PG_MAJOR=16
+      - PG_VERSION=16.1-1.pgdg120+1
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "books_db" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    ports:
+      - '5433:5432'
+    restart: 'no'
+    container_name: pg_bd
+    image: 'postgres:latest'

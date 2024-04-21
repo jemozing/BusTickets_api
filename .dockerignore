@@ -1,0 +1,15 @@
+# Игнорировать временные файлы
+**/*.tmp
+**/*.log
+**/*.bak
+
+# Игнорировать кэши Gradle
+.gradle/
+build/
+.idea/
+.jpb/
+gradle/
+gradlew
+gradlew.bat
+administrators.uml
+docker_run.txt

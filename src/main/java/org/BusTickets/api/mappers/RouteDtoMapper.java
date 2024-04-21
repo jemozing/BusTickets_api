@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RouteDtoMapper {
-    private final BusDtoMapper busDtoMapper;
 
     public RouteDto.Response.Create createRouteDto(RoutesEntity routesEntity, ScheduleEntity scheduleEntity){
         RouteDto.Response.Create routeDto = RouteDto.Response.Create.builder()
@@ -19,7 +18,7 @@ public class RouteDtoMapper {
                 .start(routesEntity.getStart())
                 .duration(routesEntity.getDuration())
                 .price(routesEntity.getPrice())
-                .bus(busDtoMapper.makeBusInformationDto(routesEntity.getBus()))
+                .bus(BusMapper.INSTANCE.entityToInformationDto(routesEntity.getBus()))
                 .status(routesEntity.isStatus())
                 .schedule(ScheduleDto.Request.Schedule.builder()
                         .fromDate(scheduleEntity.getFromDate())
@@ -39,7 +38,7 @@ public class RouteDtoMapper {
                 .start(routesEntity.getStart())
                 .duration(routesEntity.getDuration())
                 .price(routesEntity.getPrice())
-                .bus(busDtoMapper.makeBusInformationDto(routesEntity.getBus()))
+                .bus(BusMapper.INSTANCE.entityToInformationDto(routesEntity.getBus()))
                 .status(routesEntity.isStatus())
                 .schedule(ScheduleDto.Request.Schedule.builder()
                         .fromDate(scheduleEntity.getFromDate())
@@ -59,7 +58,7 @@ public class RouteDtoMapper {
                 .start(routesEntity.getStart())
                 .duration(routesEntity.getDuration())
                 .price(routesEntity.getPrice())
-                .bus(busDtoMapper.makeBusInformationDto(routesEntity.getBus()))
+                .bus(BusMapper.INSTANCE.entityToInformationDto(routesEntity.getBus()))
                 .status(routesEntity.isStatus())
                 .schedule(ScheduleDto.Request.Schedule.builder()
                         .fromDate(scheduleEntity.getFromDate())
@@ -71,6 +70,40 @@ public class RouteDtoMapper {
                         .build())
                 .build();
         return routeDto;
+    }
+    public RoutesEntity mapToRoutesEntity(RouteDto.Request.Create request){
+        return RoutesEntity.builder()
+                .fromStation(request.getFromStation())
+                .toStation(request.getToStation())
+                .start(request.getStart())
+                .duration(request.getDuration())
+                .price(request.getPrice())
+                .build();
+    }
+    public RoutesEntity mapToRoutesEntity(RouteDto.Request.Editing request){
+        return RoutesEntity.builder()
+                .fromStation(request.getFromStation())
+                .toStation(request.getToStation())
+                .start(request.getStart())
+                .duration(request.getDuration())
+                .price(request.getPrice())
+                .build();
+    }
+    public ScheduleEntity mapToScheduleEntity(RouteDto.Request.Create request){
+        return ScheduleEntity.builder()
+                .fromDate(request.getSchedule().getFromDate())
+                .toDate(request.getSchedule().getToDate())
+                .period(request.getSchedule().getPeriod())
+                .dates(request.getDates().getDates())
+                .build();
+    }
+    public ScheduleEntity mapToScheduleEntity(RouteDto.Request.Editing request){
+        return ScheduleEntity.builder()
+                .fromDate(request.getSchedule().getFromDate())
+                .toDate(request.getSchedule().getToDate())
+                .period(request.getSchedule().getPeriod())
+                .dates(request.getDates().getDates())
+                .build();
     }
 
 }

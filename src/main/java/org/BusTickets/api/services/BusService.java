@@ -3,8 +3,8 @@ package org.BusTickets.api.services;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.dto.BusDto;
 import org.BusTickets.api.mappers.BusDtoMapper;
+import org.BusTickets.api.mappers.BusMapper;
 import org.BusTickets.store.entities.BusEntity;
-import org.BusTickets.store.entities.OrdersEntity;
 import org.BusTickets.store.entities.PlacesEntity;
 import org.BusTickets.store.entities.RoutesEntity;
 import org.BusTickets.store.repositories.BusRepository;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AdminBusService {
+public class BusService {
     private final BusRepository busRepository;
     private final BusDtoMapper busDtoMapper;
     private final PlacesRepository placesRepository;
@@ -37,8 +37,11 @@ public class AdminBusService {
         List<BusEntity> busEntityList = busRepository.findAll();
         List<BusDto.Response.InfoAboutBusBrands> busBrandsList = new ArrayList<>();
         for(BusEntity entity : busEntityList){
-            busBrandsList.add(busDtoMapper.makeBusBrandsDto(entity));
+            busBrandsList.add(BusMapper.INSTANCE.entityToInfoAboutBusBrandsDto(entity));
         }
         return busBrandsList;
+    }
+    public BusEntity getBusEntityFromBusBrand(String busBrand){
+        return busRepository.findById(busBrand).orElse(new BusEntity());
     }
 }

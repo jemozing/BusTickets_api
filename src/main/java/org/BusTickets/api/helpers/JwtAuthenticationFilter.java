@@ -55,7 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-
+        else {
+            logger.info("Куки нету, передаем обработку дальше");
+            filterChain.doFilter(request, response);
+            return;
+        }
         if (jwt == null || jwt.isEmpty()) {
             filterChain.doFilter(request, response);
             return;

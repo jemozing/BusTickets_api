@@ -1,5 +1,8 @@
 ---
 server:
+  logging:
+    level:
+      root=DEBUG
   port: 8080
   servlet:
     session:
@@ -9,7 +12,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/BusTickets_DB
+    url: jdbc:postgresql://localhost:5433/bd_bus_tickets_api
     username: pguser
     password: secret
     driver-class-name: org.postgresql.Driver
