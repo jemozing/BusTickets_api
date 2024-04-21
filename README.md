@@ -25,7 +25,7 @@ To set up the Bus Company Information System locally, follow these steps:
 3. Build the Docker compose using the provided docker-compose file. 
 Usage:
    ```
-   docker-compose up --build -d
+   docker compose up --build -d
    ```
 4. Run the Docker containers to start the application.
 
