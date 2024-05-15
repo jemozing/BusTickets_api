@@ -3,9 +3,9 @@
 This project aims to develop an Information System (IS) for a bus company, focused on gathering and processing information to provide bus transportation services. The IS will enable users to purchase tickets for intercity bus trips, while allowing companies to offer convenient transportation services.
 
 #### Features
-- [ ] Ticket purchasing system
-- [ ] Schedule information for bus routes
-- [ ] Availability of seats and ticket prices for future bus trips
+- [*] Ticket purchasing system
+- [*] Schedule information for bus routes
+- [*] Availability of seats and ticket prices for future bus trips
 - [ ] User interface for accessing purchased tickets
 
 #### Architecture
