@@ -2,13 +2,13 @@ package org.BusTickets.api.mappers;
 
 import org.BusTickets.api.dto.ClientsDto;
 import org.BusTickets.store.entities.ClientsEntity;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
+@DecoratedWith(ClientsMapperDecorator.class)
 public interface ClientsMapper {
-
-    ClientsMapper INSTANCE = Mappers.getMapper(ClientsMapper.class);
 
     ClientsDto.Response.Registration entityToRegistrationDto(ClientsEntity entity);
 

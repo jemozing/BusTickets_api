@@ -49,7 +49,14 @@ public class SessionsController {
     @DeleteMapping("")
     ResponseEntity<?> logout(@Valid HttpServletRequest request,
                              @Valid HttpServletResponse response){
-        return null;
+        authenticationService.signOut(request);
+        Cookie cookie = new Cookie("JAVASESSIONID","");
+        cookie.setPath("/");
+        cookie.setMaxAge(1); // Пример: устанавливает срок действия куки на 24 часа
+        cookie.setHttpOnly(true); // Установите true, чтобы предотвратить доступ к куки из JavaScript
+        cookie.setSecure(true); // Установите true, если ваше приложение работает по HTTPS
+        response.addCookie(cookie);
+        return ResponseEntity.ok("logout complete");
     }
 
 

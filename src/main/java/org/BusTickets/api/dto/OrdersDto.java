@@ -8,15 +8,17 @@ import lombok.experimental.FieldDefaults;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum OrdersDto {;
     interface orderId { long getOrderId();}
     interface tripId { long getTripId();}
-    interface date { Date getDate();}
-    interface passengers { PassengersDto.Passenger[] getPassengers();}
+    interface date { LocalDate getDate();}
+    interface passengers { List<PassengersDto.Passenger> getPassengers();}
     interface busName { String getBusName(); }
     interface fromStation { String getFromStation(); }
     interface toStation { String getToStation(); }
@@ -28,8 +30,8 @@ public enum OrdersDto {;
     public enum Request{;
         @Builder @Value public static class BookingTickets implements tripId,date,passengers{
             long tripId;
-            Date date;
-            PassengersDto.Passenger[] passengers;
+            LocalDate date;
+            List<PassengersDto.Passenger> passengers;
         }
     }
     public enum Response{;
@@ -44,8 +46,8 @@ public enum OrdersDto {;
             Duration duration;
             double price;
             double totalPrice;
-            Date date;
-            PassengersDto.Passenger[] passengers;
+            LocalDate date;
+            List<PassengersDto.Passenger> passengers;
         }
     }
 }

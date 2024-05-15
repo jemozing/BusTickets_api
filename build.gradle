@@ -27,9 +27,8 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.2'
     implementation group: 'io.hypersistence', name: 'hypersistence-utils-hibernate-63', version: '3.7.2'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
-    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
-    implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk18on', version: '1.78'
+    annotationProcessor "jakarta.validation:jakarta.validation-api:3.0.2"
 }
 dependencies {
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
@@ -37,9 +36,19 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
 }
 /**
+ * MapStruct
+ */
+dependencies {
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
+    implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
+    annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
+}
+/**
  * Lombok
  */
 dependencies {
+    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
     compileOnly 'org.projectlombok:lombok:1.18.30'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -52,8 +61,11 @@ dependencies {
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation platform('org.junit:junit-bom:5.8.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.8.1'
 
 }
 

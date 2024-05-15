@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.controllers.AdministratorController;
 import org.BusTickets.api.dto.AdministratorsDto;
-import org.BusTickets.api.mappers.AdministratorsDtoMapper;
+import org.BusTickets.api.mappers.AdministratorsMapper;
 import org.BusTickets.store.entities.AdministratorsEntity;
 import org.BusTickets.store.entities.Role;
 import org.BusTickets.store.repositories.AdministratorsRepository;
@@ -23,7 +23,6 @@ import static org.BusTickets.api.helpers.JwtAuthenticationFilter.COOKIE_NAME;
 @RequiredArgsConstructor
 public class AdministratorService {
     private final AdministratorsRepository administratorsRepository;
-    private final AdministratorsDtoMapper administratorsDtoMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
@@ -33,7 +32,7 @@ public class AdministratorService {
 
     public AdministratorsEntity create(AdministratorsDto.Request.Registration newAdmin){
         String hashedPassword = passwordEncoder.encode(newAdmin.getPassword());
-        AdministratorsEntity entity = administratorsDtoMapper.makeAdministratorsUserEntity(newAdmin);
+        AdministratorsEntity entity = AdministratorsMapper.INSTANCE.registrationDtoToEntity(newAdmin);
         entity.setPassword(hashedPassword);
         if (administratorsRepository.existsByLogin(entity.getUsername())) {
             // Заменить на свои исключения
@@ -49,7 +48,7 @@ public class AdministratorService {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(COOKIE_NAME)) {
                     jwt = cookie.getValue();
-                    logger.info("Прошла авторизация");
+                    logger.info("Прошла авторизация админа");
                     logger.info(jwt);
                     break;
                 }
@@ -66,7 +65,7 @@ public class AdministratorService {
             logger.info("Старый пароль введен неверно");
             throw new RuntimeException("Старый пароль введен неверно");
         }
-        AdministratorsEntity newEntity = administratorsDtoMapper.editAdministratorsEntity(editAdmin);
+        AdministratorsEntity newEntity = AdministratorsMapper.INSTANCE.editingDtoToEntity(editAdmin);
         logger.info("Новая сущность:" + newEntity.toString());
         return save(newEntity);
     }

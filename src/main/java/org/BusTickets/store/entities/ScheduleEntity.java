@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,10 +20,8 @@ public class ScheduleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    Date fromDate;
-    Date toDate;
+    LocalDate fromDate;
+    LocalDate toDate;
     String period;
-    @ElementCollection
-    List<Date> dates;
 }
 

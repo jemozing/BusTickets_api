@@ -7,29 +7,26 @@ import lombok.Getter;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ScheduleDto {;
-    interface fromDate { Date getFromDate(); }
-    interface toDate { Date getToDate(); }
+    interface fromDate { LocalDate getFromDate(); }
+    interface toDate { LocalDate getToDate(); }
     interface period { String getPeriod(); }
-    interface dates { List<Date> getDates(); }
+
 
     public enum Request{;
         @Value @Builder public static class Schedule implements fromDate,toDate,period {
             @JsonProperty("fromDate")
-            Date fromDate;
+            LocalDate fromDate;
             @JsonProperty("toDate")
-            Date toDate;
+            LocalDate toDate;
             @JsonProperty("period")
             String period;
-        }
-        @Value @Builder public static class Dates implements dates {
-            @JsonProperty("dates")
-            List<Date> dates;
         }
     }
 }

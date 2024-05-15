@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum AdministratorsDto {;
-    interface Id { @Positive Long getId();}
+    interface id { @Positive Long getId();}
     interface firstName {
         /**
          * Administrator First Name
@@ -45,10 +45,10 @@ public enum AdministratorsDto {;
          */
         @Schema(name = "RegistrationAdminDTO Response",description = "Response Dto to registration Admin")
         @Value @Builder
-        public static class Registration implements Id, firstName, lastName,patronymic,position,userType {
+        public static class Registration implements id, firstName, lastName,patronymic,position,userType {
             @Schema(description = "Admin id in DB")
             @JsonProperty("id")
-            Long Id;
+            Long id;
             @Schema(description = "Admin's First Name", defaultValue = "Ivan")
             @JsonProperty("firstName")
             String firstName;
@@ -67,9 +67,9 @@ public enum AdministratorsDto {;
          */
         @Schema(name = "InforamtionAboutAdminDTO Response", description = "Response Dto to get information about Admin")
         @Value @Builder
-        public static class Information implements Id, firstName, lastName,patronymic,position,userType {
+        public static class Information implements id, firstName, lastName,patronymic,position,userType {
             @JsonProperty("id")
-            Long Id;
+            Long id;
             @Schema(description = "Admin's First Name", defaultValue = "Ivan")
             @JsonProperty("firstName")
             String firstName;

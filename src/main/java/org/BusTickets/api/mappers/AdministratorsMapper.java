@@ -2,15 +2,16 @@ package org.BusTickets.api.mappers;
 
 import org.BusTickets.api.dto.AdministratorsDto;
 import org.BusTickets.store.entities.AdministratorsEntity;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
+@DecoratedWith(AdministratorsMapperDecorator.class)
 public interface AdministratorsMapper {
 
     AdministratorsMapper INSTANCE = Mappers.getMapper(AdministratorsMapper.class);
-
     AdministratorsDto.Response.Registration entityToRegistrationDto(AdministratorsEntity entity);
 
     AdministratorsDto.Response.Information entityToInformationDto(AdministratorsEntity entity);
@@ -19,7 +20,7 @@ public interface AdministratorsMapper {
 
 
     AdministratorsEntity registrationDtoToEntity(AdministratorsDto.Request.Registration dto);
-    @Mapping(source = "newPassword",target = "password")
+
     AdministratorsEntity editingDtoToEntity(AdministratorsDto.Request.Editing dto);
 }
 

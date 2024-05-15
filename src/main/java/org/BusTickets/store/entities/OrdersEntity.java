@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,14 +20,14 @@ public class OrdersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    Date date;
+    LocalDate date;
     double totalPrice;
     @OneToOne
     RoutesEntity routes;
     @OneToMany(cascade = CascadeType.ALL)
-    private HashSet<PassengersEntity> passengers;
+    private List<PassengersEntity> passengers;
     @OneToMany(cascade = CascadeType.ALL)
-    private HashSet<TicketsEntity> tickets;
+    private List<TicketsEntity> tickets;
     @OneToOne
     ClientsEntity client;
 }

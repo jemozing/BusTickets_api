@@ -8,14 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.BusTickets.api.helpers.GlobalExceptionHandler;
-import org.BusTickets.api.mappers.AdministratorsDtoMapper;
-import org.BusTickets.api.mappers.ClientsDtoMapper;
 import org.BusTickets.api.services.AccountService;
-import org.BusTickets.api.services.AdministratorService;
-import org.BusTickets.api.services.ClientService;
-import org.BusTickets.api.services.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class AccountsController {
-    private final JwtService jwtService;
-    private final AdministratorService administratorService;
-    private final ClientService clientService;
-    private final AdministratorsDtoMapper administratorsDtoMapper;
-    private final ClientsDtoMapper clientsDtoMapper;
-    private final GlobalExceptionHandler globalExceptionHandler;
-    private final AccountService accountService;
-
+    GlobalExceptionHandler globalExceptionHandler;
+    AccountService accountService;
     @DeleteMapping("")
     ResponseEntity<?> userLeave(@Valid HttpServletRequest request, HttpServletResponse response){
         try{

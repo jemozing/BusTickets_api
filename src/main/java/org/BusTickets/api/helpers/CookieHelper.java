@@ -2,6 +2,7 @@ package org.BusTickets.api.helpers;
 
 import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.BusTickets.api.services.JwtService;
 import org.springframework.data.util.Pair;
@@ -9,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CookieHelper {
-    private JwtService jwtService;
+    private final JwtService jwtService;
     public long getUserIDInCookie(Cookie[] cookies) throws Exception  {
         // Перебираем куки и ищем JAVASESSIONID
         String sessionId = getSessionId(cookies);
@@ -42,9 +43,9 @@ public class CookieHelper {
         // Если нашли JAVASESSIONID, обрабатываем его через jwtDecoder
         if (sessionId != null) {
             userId = jwtService.extractUserId(sessionId);
-            log.info(Long.toString(userId));
+            log.info("userId" + Long.toString(userId));
             String userRole = jwtService.extractUserRole(sessionId);
-            log.info(userRole);
+            log.info("userRole" + userRole);
             return Pair.of(userId,userRole);
         } else {
         return null;

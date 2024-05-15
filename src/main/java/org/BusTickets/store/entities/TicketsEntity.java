@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -17,9 +18,9 @@ public class TicketsEntity {
     @Id
     String id;
     double price;
-    Date date;
+    LocalDate date;
     int bus_place;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     PassengersEntity passenger;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id")

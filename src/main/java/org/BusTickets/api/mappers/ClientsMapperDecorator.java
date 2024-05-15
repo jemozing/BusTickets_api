@@ -3,12 +3,12 @@ package org.BusTickets.api.mappers;
 import org.BusTickets.api.dto.ClientsDto;
 import org.BusTickets.store.entities.ClientsEntity;
 import org.BusTickets.store.entities.Role;
-import org.BusTickets.store.entities.UsersEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ClientsDtoMapper {
-    public ClientsDto.Response.Registration makeClientsRegistrationDto(ClientsEntity entity) {
+public class ClientsMapperDecorator implements ClientsMapper{
+    @Override
+    public ClientsDto.Response.Registration entityToRegistrationDto(ClientsEntity entity) {
         return ClientsDto.Response.Registration.builder()
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
@@ -20,7 +20,8 @@ public class ClientsDtoMapper {
                 .build();
     }
 
-    public ClientsDto.Response.Information makeClientsInfoDto(ClientsEntity entity) {
+    @Override
+    public ClientsDto.Response.Information entityToInformationDto(ClientsEntity entity) {
         return ClientsDto.Response.Information.builder()
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
@@ -32,7 +33,8 @@ public class ClientsDtoMapper {
                 .build();
     }
 
-    public ClientsDto.Response.Editing makeClientsEditingDto(ClientsEntity entity) {
+    @Override
+    public ClientsDto.Response.Editing entityToEditingDto(ClientsEntity entity) {
         return ClientsDto.Response.Editing.builder()
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
@@ -43,7 +45,8 @@ public class ClientsDtoMapper {
                 .build();
     }
 
-    public ClientsEntity makeClientUserEntity(ClientsDto.Request.Registration dto) {
+    @Override
+    public ClientsEntity registrationDtoToEntity(ClientsDto.Request.Registration dto) {
         ClientsEntity clientsEntity = ClientsEntity.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
@@ -57,15 +60,15 @@ public class ClientsDtoMapper {
         return clientsEntity;
     }
 
-    public ClientsEntity EditClientEntity(ClientsDto.Request.Editing dto) {
-        ClientsEntity entity = ClientsEntity.builder()
+    @Override
+    public ClientsEntity editingDtoToEntity(ClientsDto.Request.Editing dto) {
+        //entity.setPassword(dto.getNewPassword());
+        return ClientsEntity.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .patronymic(dto.getPatronymic())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
                 .build();
-        entity.setPassword(dto.getNewPassword());
-        return entity;
     }
 }

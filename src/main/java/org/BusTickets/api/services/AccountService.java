@@ -17,14 +17,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class AccountService {
-    private CookieHelper cookieHelper;
-    private UsersRepository usersRepository;
-    private AdministratorService administratorService;
-    private AdministratorsMapper administratorsMapper;
-    private ClientService clientService;
-    private ClientsMapper clientsMapper;
+    private final CookieHelper cookieHelper;
+    private final UsersRepository usersRepository;
+    private final AdministratorService administratorService;
+    private final AdministratorsMapper administratorsMapper;
+    private final ClientsMapper clientsMapper;
+    private final ClientService clientService;
     public String deleteUser(HttpServletRequest request, HttpServletResponse response) throws Exception{
         // Получаем куки из запроса
         long userId = cookieHelper.getUserIDInCookie(request.getCookies());
@@ -35,15 +34,19 @@ public class AccountService {
 
         if(request.getCookies() !=null) {
             Pair<Long, String> curUser = cookieHelper.getIdAndRole(request.getCookies());
+            log.info("curUser = " + curUser.toString());
             if (curUser.getFirst() != 0) {
                 long userId = curUser.getFirst();
                 String userRole = curUser.getSecond();
                 if (userRole.equals("admin")) {
+                    log.info("login admin");
                     AdministratorsEntity entity = administratorService.getById(userId);
-                    return administratorsMapper.INSTANCE.entityToInformationDto(entity);
+                    log.info("AdEntity = " + entity);
+                    return administratorsMapper.entityToInformationDto(entity);
                 } else if (userRole.equals("client")) {
+                    log.info("login client");
                     ClientsEntity entity = clientService.getById(userId);
-                    return clientsMapper.INSTANCE.entityToInformationDto(entity);
+                    return clientsMapper.entityToInformationDto(entity);
                 }
             }
         }

@@ -4,8 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.BusTickets.store.entities.JwtTokenEntity;
 import org.BusTickets.store.entities.UsersEntity;
+import org.BusTickets.store.repositories.JwtTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,12 +20,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtService {
     @Value("${token.signing.key}")
     private String jwtSigningKey;
-
+    private final JwtTokenRepository jwtTokenRepository;
     /**
      * Извлечение имени пользователя из токена
      *
@@ -42,7 +47,8 @@ public class JwtService {
         return extractClaim(token, claims -> claims.get("role", String.class));
     }
     public Long extractUserId(String token){
-            return Long.getLong(extractClaim(token,Claims::getId));
+        log.info(extractClaim(token,Claims::getId) + "   " + token);
+            return Long.parseLong(extractClaim(token,Claims::getId));
     }
     /**
      * Генерация токена
@@ -51,12 +57,23 @@ public class JwtService {
      * @return токен
      */
     public String generateToken(UserDetails userDetails) {
+        if (jwtTokenRepository.existsByLoginAndValidTrue(userDetails.getUsername())) {
+            if(jwtTokenRepository.findValidByLogin(userDetails.getUsername())) {
+                return jwtTokenRepository.findTokenByLogin(userDetails.getUsername());
+            }
+        }
         Map<String, Object> claims = new HashMap<>();
         if (userDetails instanceof UsersEntity customUserDetails) {
             claims.put("id", customUserDetails.getId());
             claims.put("role", customUserDetails.getUserType());
         }
-        return generateToken(claims, userDetails);
+        String token = generateToken(claims, userDetails);
+        jwtTokenRepository.saveAndFlush(JwtTokenEntity.builder()
+                .token(token)
+                .valid(true)
+                .login(userDetails.getUsername())
+                .build());
+        return token;
     }
 
     /**
@@ -68,9 +85,21 @@ public class JwtService {
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        boolean jwtValid = false;
+        if (jwtTokenRepository.existsByLoginAndValidTrue(userDetails.getUsername())) {
+            if(jwtTokenRepository.findValidByLogin(userDetails.getUsername())) {
+                if(!isTokenExpired(token)){
+                    jwtValid = true;
+                } else {
+                    tokenInvalidate(token);
+                }
+            }
+        }
+        return (userName.equals(userDetails.getUsername())) && jwtValid;
     }
-
+    public void tokenInvalidate(String jwtToken){
+        jwtTokenRepository.invalidateByToken(jwtToken);
+    }
     /**
      * Извлечение данных из токена
      *
@@ -81,6 +110,7 @@ public class JwtService {
      */
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
+        log.info(claims.toString());
         return claimsResolvers.apply(claims);
     }
 
@@ -92,7 +122,7 @@ public class JwtService {
      * @return токен
      */
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+        return Jwts.builder().id(extraClaims.get("id").toString()).claims(extraClaims).setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();

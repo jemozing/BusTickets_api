@@ -5,8 +5,9 @@ import org.BusTickets.store.entities.TicketsEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TicketsDtoMapper {
     TicketsDtoMapper INSTANCE = Mappers.getMapper(TicketsDtoMapper.class);
 
@@ -21,6 +22,8 @@ public interface TicketsDtoMapper {
     @Mapping(source = "passenger.lastName",target = "lastName")
     @Mapping(source = "passenger.passport",target = "passport")
     @Mapping(source = "bus_place",target = "place")
-    @Mapping(source = "order.Id",target = "orderId")
+    @Mapping(source = "order.id",target = "orderId")
     PlacesDto.Response.ChoosePlace entityToDto(TicketsEntity entity);
+
+
 }

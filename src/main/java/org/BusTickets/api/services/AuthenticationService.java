@@ -1,9 +1,13 @@
 package org.BusTickets.api.services;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.controllers.AdministratorController;
 import org.BusTickets.api.dto.JwtAuthenticationDto;
 import org.BusTickets.api.dto.UsersDto;
+import org.BusTickets.api.helpers.CookieHelper;
+import org.BusTickets.store.repositories.JwtTokenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final CookieHelper cookieHelper;
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
     /*public JwtAuthenticationDto.Response.JwtToken signUp(UsersDto.Request.SignIn request) {
 
@@ -37,7 +42,10 @@ public class AuthenticationService {
                 .token(jwt)
                 .build();;
     }*/
-    public void signOut(){}
+    public void signOut(HttpServletRequest request){
+        String token = cookieHelper.getSessionId(request.getCookies());
+        jwtService.tokenInvalidate(token);
+    }
     /**
      * Аутентификация пользователя
      *

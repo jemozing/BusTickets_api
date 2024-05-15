@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.BusTickets.api.dto.PlacesDto;
+import org.BusTickets.api.services.OrdersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +19,17 @@ import org.springframework.web.bind.annotation.*;
 @Transactional
 @RestController
 public class PlacesController {
-
+    OrdersService ordersService;
     @PostMapping("/{orderId}")
     @PreAuthorize("hasAuthority('client')")
-    ResponseEntity<?> getFreePlaces(@PathVariable String orderId,
+    ResponseEntity<?> getFreePlaces(@PathVariable Long orderId,
                                     @Valid HttpServletRequest request,
                                     HttpServletResponse response){
-        return null;
+        try {
+            return ResponseEntity.ok().body(ordersService.getAvailableSeatsForRouteAndDate(orderId));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Заказ не найден" + e.getMessage());
+        }
     }
 
     @PostMapping("")
@@ -32,7 +37,11 @@ public class PlacesController {
     ResponseEntity<?> choosePlace(@RequestBody PlacesDto.Request.ChoosePlace newChoosePlace,
                                   @Valid HttpServletRequest request,
                                   HttpServletResponse response){
-        return null;
+        try {
+            return ResponseEntity.ok().body(ordersService.choiceAvailablePlace(newChoosePlace));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Ошибка " + e.getMessage());
+        }
     }
 
 }

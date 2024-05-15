@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class PlacesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    Date date;
+    LocalDate date;
     @ElementCollection
     List<String> availablePlaces;
     @ManyToOne

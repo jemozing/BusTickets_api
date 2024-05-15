@@ -1,9 +1,13 @@
 package org.BusTickets.api.services;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.BusTickets.api.controllers.AdministratorController;
 import org.BusTickets.api.dto.ClientsDto;
-import org.BusTickets.api.mappers.ClientsDtoMapper;
+import org.BusTickets.api.mappers.AdministratorsMapper;
+import org.BusTickets.api.mappers.ClientsMapper;
+import org.BusTickets.store.entities.AdministratorsEntity;
 import org.BusTickets.store.entities.ClientsEntity;
 import org.BusTickets.store.entities.Role;
 import org.BusTickets.store.repositories.ClientsRepository;
@@ -14,12 +18,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.BusTickets.api.helpers.JwtAuthenticationFilter.COOKIE_NAME;
+
 @Service
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientsRepository clientsRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ClientsDtoMapper clientsDtoMapper;
+    private final ClientsMapper clientsMapper;
+    private final JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AdministratorController.class);
     /**
      * Сохранение пользователя
@@ -38,7 +46,7 @@ public class ClientService {
      */
     public ClientsEntity create(ClientsDto.Request.Registration newClient) {
         String hashedPassword = passwordEncoder.encode(newClient.getPassword());
-        ClientsEntity entity = clientsDtoMapper.makeClientUserEntity(newClient);
+        ClientsEntity entity = clientsMapper.registrationDtoToEntity(newClient);
         entity.setPassword(hashedPassword);
         if (clientsRepository.existsByLogin(entity.getUsername())) {
             // Заменить на свои исключения
@@ -51,9 +59,41 @@ public class ClientService {
         logger.info(entity.toString());
         return save(entity);
     }
-    public ClientsEntity edit(ClientsDto.Request.Editing editClient){
-        return null;
+    public ClientsEntity edit(ClientsDto.Request.Editing editClient, HttpServletRequest request){
+        var cookies = request.getCookies();
+        String jwt = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(COOKIE_NAME)) {
+                    jwt = cookie.getValue();
+                    logger.info("Прошла авторизация клиента");
+                    logger.info(jwt);
+                    break;
+                }
+            }
+        }
+        ClientsEntity oldEntity = clientsRepository.findById(jwtService.extractUserId(jwt))
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        if(editClient.getOldPassword().equals(editClient.getNewPassword())){
+            logger.info("Старый и новый пароль не может быть одинаковым");
+            throw new RuntimeException("Старый и новый пароль не может быть одинаковым");
+        }
+        if(passwordEncoder.matches(editClient.getOldPassword(),oldEntity.getPassword())){
+            logger.info("Старый пароль введен неверно");
+            throw new RuntimeException("Старый пароль введен неверно");
+        }
+        String hashedPassword = passwordEncoder.encode(editClient.getNewPassword());
+        oldEntity.setPassword(hashedPassword);
+        oldEntity.setFirstName(editClient.getFirstName());
+        oldEntity.setLastName(editClient.getLastName());
+        oldEntity.setPatronymic(editClient.getPatronymic());
+        oldEntity.setEmail(editClient.getEmail());
+        oldEntity.setPhone(editClient.getPhone());
+        oldEntity.setPassword(hashedPassword);
+        logger.info("Новая сущность:" + oldEntity.toString());
+        return save(oldEntity);
     }
+
     /**
      * Получение пользователя по имени пользователя
      *

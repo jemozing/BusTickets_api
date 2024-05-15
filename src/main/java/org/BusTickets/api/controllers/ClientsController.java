@@ -8,11 +8,11 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.BusTickets.api.dto.AdministratorsDto;
 import org.BusTickets.api.dto.ClientsDto;
-import org.BusTickets.api.dto.OrdersDto;
-import org.BusTickets.api.dto.PlacesDto;
 import org.BusTickets.api.helpers.GlobalExceptionHandler;
-import org.BusTickets.api.mappers.ClientsDtoMapper;
+import org.BusTickets.api.mappers.AdministratorsMapper;
+import org.BusTickets.api.mappers.ClientsMapper;
 import org.BusTickets.api.services.ClientService;
 import org.BusTickets.api.services.JwtService;
 import org.BusTickets.api.services.UserService;
@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,9 +35,8 @@ import java.util.List;
 @RestController
 public class ClientsController {
     ClientsRepository clientsRepository;
-    ClientsDtoMapper clientsDtoMapper;
+    ClientsMapper clientsMapper;
     ClientService clientService;
-    PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final JwtService jwtService;
     private final GlobalExceptionHandler globalExceptionHandler;
@@ -46,8 +44,7 @@ public class ClientsController {
     @PostMapping("")
     ResponseEntity<?> clientRegistration(@RequestBody ClientsDto.Request.Registration newClient, @Valid HttpServletRequest request, HttpServletResponse response){
         try {
-            ClientsDto.Response.Registration newClientResp = clientsDtoMapper
-                    .makeClientsRegistrationDto(clientService.create(newClient));
+            ClientsDto.Response.Registration newClientResp = clientsMapper.entityToRegistrationDto(clientService.create(newClient));
             var user = userService.userDetailsService().loadUserByUsername(newClient.getLogin());
             logger.info(user.toString());
             var jwtToken = jwtService.generateToken(user);
@@ -72,7 +69,15 @@ public class ClientsController {
     @PutMapping ("")
     @PreAuthorize("hasAuthority('client')")
     ResponseEntity<?> editingClient(@RequestBody ClientsDto.Request.Editing editingClient, @Valid HttpServletRequest request, HttpServletResponse response){
-        return null;
+        try{
+            logger.info("Начинаем редактирование пользователя");
+            ClientsDto.Response.Editing clientsResp = clientsMapper
+                    .entityToEditingDto(clientService.edit(editingClient, request));
+            return ResponseEntity.ok()
+                    .body(clientsResp);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(globalExceptionHandler.handleException(e));
+        }
     }
 
     @GetMapping("")
@@ -81,7 +86,7 @@ public class ClientsController {
         final List<ClientsEntity> clientsEntitiesList = clientsRepository.findAll();
         ArrayList<ClientsDto.Response.Information> clientsDtoList = new ArrayList<>();
         for (ClientsEntity clientsEntity : clientsEntitiesList) {
-            clientsDtoList.add(clientsDtoMapper.makeClientsInfoDto(clientsEntity));
+            clientsDtoList.add(clientsMapper.entityToInformationDto(clientsEntity));
         }
         return ResponseEntity.ok().body(clientsDtoList);
     }

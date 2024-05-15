@@ -3,26 +3,14 @@ package org.BusTickets.api.mappers;
 import org.BusTickets.api.dto.AdministratorsDto;
 import org.BusTickets.store.entities.AdministratorsEntity;
 import org.BusTickets.store.entities.Role;
-import org.BusTickets.store.entities.UsersEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AdministratorsDtoMapper {
-
-    public AdministratorsDto.Response.Registration makeAdministratorsRegistrationDto(AdministratorsEntity entity){
+public class AdministratorsMapperDecorator implements AdministratorsMapper{
+    @Override
+    public AdministratorsDto.Response.Registration entityToRegistrationDto(AdministratorsEntity entity) {
         return AdministratorsDto.Response.Registration.builder()
-               .Id(entity.getId())
-               .firstName(entity.getFirstName())
-               .lastName(entity.getLastName())
-                .patronymic(entity.getPatronymic())
-                .position(entity.getPosition())
-                .userType(entity.getUserType().name())
-                .build();
-    }
-
-    public AdministratorsDto.Response.Information makeAdministratorsInfoDto(AdministratorsEntity entity){
-        return AdministratorsDto.Response.Information.builder()
-                .Id(entity.getId())
+                .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .patronymic(entity.getPatronymic())
@@ -30,8 +18,19 @@ public class AdministratorsDtoMapper {
                 .userType(entity.getUserType().name())
                 .build();
     }
-
-    public AdministratorsDto.Response.Editing makeAdministratorsEditingDto(AdministratorsEntity entity){
+    @Override
+    public AdministratorsDto.Response.Information entityToInformationDto(AdministratorsEntity entity) {
+        return AdministratorsDto.Response.Information.builder()
+                .id(entity.getId())
+                .firstName(entity.getFirstName())
+                .lastName(entity.getLastName())
+                .patronymic(entity.getPatronymic())
+                .position(entity.getPosition())
+                .userType(entity.getUserType().name())
+                .build();
+    }
+    @Override
+    public AdministratorsDto.Response.Editing entityToEditingDto(AdministratorsEntity entity) {
         return AdministratorsDto.Response.Editing.builder()
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
@@ -40,8 +39,8 @@ public class AdministratorsDtoMapper {
                 .userType(entity.getUserType().name())
                 .build();
     }
-
-    public AdministratorsEntity makeAdministratorsUserEntity(AdministratorsDto.Request.Registration dto){
+    @Override
+    public AdministratorsEntity registrationDtoToEntity(AdministratorsDto.Request.Registration dto) {
         AdministratorsEntity entity = AdministratorsEntity.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
@@ -53,15 +52,14 @@ public class AdministratorsDtoMapper {
         entity.setUserType(Role.admin);
         return entity;
     }
-
-    public AdministratorsEntity editAdministratorsEntity(AdministratorsDto.Request.Editing dto) {
-        AdministratorsEntity entity = AdministratorsEntity.builder()
+    @Override
+    public AdministratorsEntity editingDtoToEntity(AdministratorsDto.Request.Editing dto) {
+        //entity.setPassword(dto.getNewPassword());
+        return AdministratorsEntity.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .patronymic(dto.getPatronymic())
                 .position(dto.getPosition())
                 .build();
-        entity.setPassword(dto.getNewPassword());
-        return entity;
     }
 }

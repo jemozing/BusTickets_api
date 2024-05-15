@@ -8,6 +8,9 @@ import org.hibernate.annotations.Type;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -40,4 +43,6 @@ public class RoutesEntity {
     ScheduleEntity schedule;
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL)
     Set<PlacesEntity> places;
+    @ElementCollection
+    List<LocalDate> dates;
 }

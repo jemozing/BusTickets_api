@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum PlacesDto {;
-    interface orderId { int getOrderId();}
+    interface orderId { Long getOrderId();}
     interface firstName { String getFirstName();}
     interface lastName { String getLastName(); }
     interface passport {int getPassport();}
@@ -22,7 +22,7 @@ public enum PlacesDto {;
     public enum Request{;
         @Builder
         @Value public static class ChoosePlace implements orderId,firstName,lastName,passport,place{
-            int orderId;
+            Long orderId;
             String firstName;
             String lastName;
             int passport;
@@ -32,7 +32,7 @@ public enum PlacesDto {;
     public enum Response{;
         @Builder
         @Value public static class ChoosePlace implements orderId,firstName,lastName,passport,place,ticket{
-            int orderId;
+            Long orderId;
             String firstName;
             String lastName;
             int passport;

@@ -17,6 +17,7 @@ public class BusEntity {
     String bus_name;
     int num_of_seats;
     float bus_range;
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver_id", referencedColumnName = "id")
     DriverEntity driver;
 }

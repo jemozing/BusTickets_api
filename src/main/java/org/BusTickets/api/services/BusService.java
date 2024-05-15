@@ -11,6 +11,7 @@ import org.BusTickets.store.repositories.BusRepository;
 import org.BusTickets.store.repositories.PlacesRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BusService {
     private final BusRepository busRepository;
-    private final BusDtoMapper busDtoMapper;
+    private final BusMapper busMapper;
     private final PlacesRepository placesRepository;
 
-    public PlacesEntity generatePLacesFullEntity(Date date, RoutesEntity routesEntity){
+    public PlacesEntity generatePLacesFullEntity(LocalDate date, RoutesEntity routesEntity){
         List<String> fullPlaces = new ArrayList<>();
         for (int i = 1; i <= routesEntity.getBus().getNum_of_seats(); i++) {
-            fullPlaces.add("место " + i);
+            fullPlaces.add("место_" + i);
         }
         return PlacesEntity.builder()
                 .route(routesEntity)
@@ -37,7 +38,7 @@ public class BusService {
         List<BusEntity> busEntityList = busRepository.findAll();
         List<BusDto.Response.InfoAboutBusBrands> busBrandsList = new ArrayList<>();
         for(BusEntity entity : busEntityList){
-            busBrandsList.add(BusMapper.INSTANCE.entityToInfoAboutBusBrandsDto(entity));
+            busBrandsList.add(busMapper.entityToInfoAboutBusBrandsDto(entity));
         }
         return busBrandsList;
     }

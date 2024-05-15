@@ -22,8 +22,8 @@ public class DriverEntity {
     @Column(nullable = false)
     String firstName;
     String patronymic;
-    @Column(nullable = false)
-    int phone;
+    @Column(nullable = false, length = 14)
+    String phone;
     @OneToMany
     List<BusEntity> busList;
 

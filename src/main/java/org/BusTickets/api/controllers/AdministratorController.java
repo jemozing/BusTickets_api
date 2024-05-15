@@ -10,13 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.BusTickets.api.dto.AdministratorsDto;
 import org.BusTickets.api.helpers.GlobalExceptionHandler;
-import org.BusTickets.api.mappers.AdministratorsDtoMapper;
 import org.BusTickets.api.mappers.AdministratorsMapper;
-import org.BusTickets.api.mappers.ClientsDtoMapper;
 import org.BusTickets.api.services.AdministratorService;
 import org.BusTickets.api.services.JwtService;
 import org.BusTickets.api.services.UserService;
-import org.BusTickets.store.repositories.ClientsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -30,11 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Transactional
 @RestController
 public class AdministratorController {
-    AdministratorsDtoMapper administratorsDtoMapper;
-    ClientsDtoMapper clientsDtoMapper;
-    ClientsRepository clientsRepository;
-    AdministratorService administratorService;
-
+    final AdministratorService administratorService;
     private final UserService userService;
     private final JwtService jwtService;
     private final GlobalExceptionHandler globalExceptionHandler;
@@ -43,8 +36,7 @@ public class AdministratorController {
     ResponseEntity<?> registrationAdmin(@RequestBody AdministratorsDto.Request.Registration newAdmin, HttpServletRequest request, HttpServletResponse response){
         try{
             // Хэширование пароля
-            AdministratorsDto.Response.Registration newAdminResp = administratorsDtoMapper
-                    .makeAdministratorsRegistrationDto(administratorService.create(newAdmin)); //обработка запроса
+            AdministratorsDto.Response.Registration newAdminResp = AdministratorsMapper.INSTANCE.entityToRegistrationDto(administratorService.create(newAdmin)); //обработка запроса
             var user = userService.userDetailsService().loadUserByUsername(newAdmin.getLogin());
             logger.info(user.toString());
             var jwtToken = jwtService.generateToken(user);
